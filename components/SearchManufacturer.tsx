@@ -1,3 +1,5 @@
+"use client";
+
 import { SearchManufacturerProps } from '@/types'
 import React, { Fragment, useState } from 'react';
 import { Combobox, Transition } from '@headlessui/react'
@@ -11,21 +13,24 @@ const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacture
     .toLowerCase()
     .replace(/\s+/g, '')
     .includes(query.toLowerCase().replace(/\s+/g, '')))
+
     return (
         <div className='search-manufacturer'>
             <Combobox value={manufacturer} onChange={setManufacturer}>
                 <div className="relative w-full">
-                    <Combobox.Button className='absolute top-[14px]'>
+                    <Combobox.Button className='absolute top-[14px] w-[20px] h-[20px] ml-4'>
                         <Image
-                        src='/car-logo.png'
+                        src='/car-logo.svg'
                         height={20}
                         width={20}
-                        alt="Car Logo"/>
+                        alt="Car Logo"
+                        />
                     </Combobox.Button>
                     <Combobox.Input
                     className='search-manufacturer__input'
                     displayValue={(item:string)=>item}
                     onChange={(e)=>setQuery(e.target.value)}
+                    placeholder='Toyota'
                     />
                     <Transition
                     as={Fragment}
@@ -39,7 +44,7 @@ const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacture
                         {filteredManufacturers.length === 0 && query !== "" ? (
                             <Combobox.Option
                             value={query}
-                            className='search-manufacturer__option'>
+                            className='search-manufacturer__option absolute'>
                                 Create "{query}"
                             </Combobox.Option>
                         ):(
@@ -53,7 +58,7 @@ const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacture
                                         <span
                                         className={`block truncate ${selected? 'font-medium':'font-normal'}`}>{car}</span>
                                         {selected? (
-                                            <span className={`absolute inset-y-0 left-0 flex items-center pl-3 ${active?'text-white':'text-pribg-primary-purple'}`}>
+                                            <span className={`absolute z-10 inset-y-0 left-0 flex items-center pl-3 ${active?'text-white':'text-pribg-primary-purple'}`}>
                                             </span>
                                         ):null}
                                         </>

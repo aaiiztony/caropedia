@@ -2,10 +2,10 @@
 
 import Image from 'next/image'
 import React from 'react'
-import Navbar from './Navbar'
 import CustomButton from './CustomButton'
 
 const Home = () => {
+    //scrolls to the main content of the page ie the Car Explore Section
     const handleScroll = () => {
         const nextSection = document.getElementById('discover');
         if (nextSection){

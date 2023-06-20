@@ -15,7 +15,7 @@ const Navbar = () => {
       <CustomButton
       title='Sign In'
       handleClick={handleSignIn}
-      customStyles='text-primary-blue'/>
+      customStyles='text-primary-blue bg-white rounded-full min-w-[130px]'/>
       </div>
     </header>
   )

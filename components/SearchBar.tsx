@@ -3,6 +3,7 @@
 import Image from "next/image";
 import SearchManufacturer from "./SearchManufacturer";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const SearchButton = ({customClasses}:{customClasses?:string}) => {
   return (
@@ -21,12 +22,42 @@ const SearchButton = ({customClasses}:{customClasses?:string}) => {
 }
 
 const SearchBar = () => {
-    const [manufacturer, setManufacturer] = useState('');
+  //storing the manufacturer information from user input
+  const [manufacturer, setManufacturer] = useState('');
+
+  //storing the model information from user input
     const [model, setModel] = useState('');
-    
-    const handleSubmit = () =>{}
+
+    const router = useRouter();
+  //handleSubmit utilises the handleSearchParams function to update the window.location.pathname 
+    const handleSubmit = (e:React.FormEvent<HTMLFormElement>) =>{
+      e.preventDefault();
+      if(manufacturer.trim() === '' && model.trim() === ''){
+        return alert("Please provide valid input")
+      }
+      handleSearchParams(model.toLowerCase(),manufacturer.toLowerCase());
+    }
+
+    //handleSearchParams function with the model and mfg parameters update the URL of the path from next/navigation
+    const handleSearchParams = (model:string, manufacturer:string) => {
+      const searchParams = new URLSearchParams(window.location.search);
+      //sets the manufacturer to user input. If user input is none, it deletes the current info from the url
+      if(manufacturer){
+        searchParams.set('manufacturer', manufacturer);
+      }else{
+        searchParams.delete(manufacturer);
+      }
+      //sets the model to user input. If user input is none, it deletes the current info from the url
+      if(model){
+        searchParams.set('model', model);
+      }else{
+        searchParams.delete(model);
+      }
+      const newPath = `${window.location.pathname}?${searchParams.toString()}`
+      router.push(newPath);
+    }
   return (
-    <form className='searchBar' onSubmit={handleSubmit}>
+    <form className='searchbar' onSubmit={handleSubmit}>
         <div className="searchbar__item">
             <SearchManufacturer manufacturer={manufacturer} setManufacturer={setManufacturer}/>
             <SearchButton customClasses='sm:hidden'/>
@@ -35,6 +66,12 @@ const SearchBar = () => {
             <Image src='/model-icon.png' alt="vehicle model" height={25} width={25} 
             className="absolute w-[20px] h-[20px] ml-4"/>
             <input
+            className='searchbar__input'
+            type='text'
+            name='model'
+            value={model}
+            onChange={(e)=> setModel(e.target.value)}
+            placeholder="Corolla.."
             />
             <SearchButton customClasses='sm:hidden'/>
         </div>
